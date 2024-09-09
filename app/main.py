@@ -11,8 +11,25 @@ async def docs_redirect():
     return RedirectResponse(url='/ui')
 
 # UI
-@app.get("/ui", summary="Fetch a password from the password-generator service")
+@app.get("/ui", summary="Fetch a password from the password-generator service", tags=["Password Generator UI"])
 async def fetch_generated_password(pass_length: Optional[int] = "20"):
+    """
+    Parameters:<br>
+    - pass_length: (int) Length of password to be generated.
+
+    Returns:<br>
+    - generated_password: (str) Password from the password-generator service.
+
+    """
+    if pass_length is None:
+        return ("This should not happen") # Cast from str to int to allow for null / empty checking? Currently this does nothing.
+    if pass_length == 0:
+        return ("Password length cannot be 0")
+    elif pass_length < 0:
+        return ("Password length cannot be negative")
+    elif pass_length < 12:
+        return("Minimum password length is 12. Please try again.")
+
 
     # logging:
     # logging.basicConfig(level=logging.DEBUG, format="%(message)s")
