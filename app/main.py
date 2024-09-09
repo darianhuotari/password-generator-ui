@@ -17,19 +17,17 @@ async def fetch_generated_password(pass_length: Optional[int] = "20"):
     # logging:
     # logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
+    # We could use str.format to insert the literal value of pass_length
+    # base_url = "http://localhost:8080/generate?pass_length={}"
+    # url = base_url.format(pass_length)
+
     # Call the password-generator API to generate a password.
-    # Use str.format to insert the literal value of pass_length
-    base_url = "http://localhost:8080/generate?pass_length={}"
-    url = base_url.format(pass_length)
-
-     # Another way to do this is with an f string; example:
-    # response = requests.get(f"http://localhost:8080/generate?pass_length={pass_length}")
-
     # Instantiate a session for connection re-use. Effectively doesn't do anything unless a client makes multiple requests in the same session which isn't implemented right now but
     # is nice to have 
     # We also wrap in the with block so the session is closed if there are unhandled exceptions: https://requests.readthedocs.io/en/latest/user/advanced/#session-objects
     with requests.Session() as session:
-        response = session.get(url)
+        # Use an f-string to insert the literal value of pass_length
+        response = session.get(f"http://localhost:8080/generate?pass_length={pass_length}")
         if response.status_code == 200:
             returned_pwd = response.json()
             return returned_pwd
