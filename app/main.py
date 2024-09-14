@@ -1,7 +1,11 @@
+# This app is not actively being developed and is only here for reference purposes
+
 from typing import Optional
 from fastapi import FastAPI
 import logging, requests
 from fastapi.responses import RedirectResponse
+import aiohttp
+import asyncio
 
 app = FastAPI()
 
@@ -42,12 +46,11 @@ async def fetch_generated_password(pass_length: Optional[int] = "20"):
     # Instantiate a session for connection re-use. Effectively doesn't do anything unless a client makes multiple requests in the same session which isn't implemented right now but
     # is nice to have 
     # We also wrap in the with block so the session is closed if there are unhandled exceptions: https://requests.readthedocs.io/en/latest/user/advanced/#session-objects
-    with requests.Session() as session:
+    async with aiohttp.ClientSession() as session:
         # Use an f-string to insert the literal value of pass_length
-        response = session.get(f"http://localhost:8080/generate?pass_length={pass_length}")
-        if response.status_code == 200:
-            returned_pwd = response.json()
-            return returned_pwd
+        async with session.get(f"http://localhost:8080/generate?pass_length={pass_length}") as response:
+            if response.status == 200:
+                return await response.json()
     
 # Simple health endpoint
 @app.get("/health", summary="Check health status", tags=['healthcheck'])
