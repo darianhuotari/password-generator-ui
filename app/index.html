@@ -12,11 +12,18 @@
     <main>
         <h1>Password Generator UI</h1>
         <hr/>
-        <button onclick="fetchAndDisplayPassword()">Get a password!</button> 
+        <!-- <button onclick="fetchAndDisplayPassword()">Get a password!</button>  -->
         <!-- Convert this to a form to use an HTML input element -->
          <!-- Then, pass value to fetchAndDisplayPassword  -->
           <!-- Will have to add a new variable to pass along the value from the Form input element -->
-        <p id="password"></p>
+        <!-- <p id="password"></p> -->
+
+        <form id="pwdForm" method="GET">
+          <label for="fname">Password Length (Optional):</label><br>
+          <input type="text" id="pwdLength" name="pwdLength"><br><br>
+          <input type="submit" value="Get a password!">
+        </form>
+        <p id="formPassword"></p>
     </main>
     <script src="./index.js"></script>
   </body>
